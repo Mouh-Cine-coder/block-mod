@@ -31,9 +31,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ApiToken::class, orphanRemoval: true)]
-    private Collection $apiTokens;
-
     #[ORM\ManyToOne(inversedBy: 'worksIn')]
     private ?Warehouse $warehouse = null;
 
@@ -113,36 +110,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, ApiToken>
-     */
-    public function getApiTokens(): Collection
-    {
-        return $this->apiTokens;
-    }
-
-    public function addApiToken(ApiToken $apiToken): self
-    {
-        if (!$this->apiTokens->contains($apiToken)) {
-            $this->apiTokens->add($apiToken);
-            $apiToken->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeApiToken(ApiToken $apiToken): self
-    {
-        if ($this->apiTokens->removeElement($apiToken)) {
-            // set the owning side to null (unless already changed)
-            if ($apiToken->getUser() === $this) {
-                $apiToken->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-    
     public function getWarehouse(): ?Warehouse
     {
         return $this->warehouse;

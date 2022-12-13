@@ -19,15 +19,9 @@ use App\Repository\ApiTokenRepository;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry, ApiTokenRepository $apiTokenRepository)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
-        $this->apiTokenRepository = $apiTokenRepository;
-    }
-
-    public function findByApiToken(string $apiToken): ?User
-    {
-        return $this->apiTokenRepository->findOneBy(['token' => $apiToken])?->getUser();
     }
 
     public function save(User $entity, bool $flush = false): void
