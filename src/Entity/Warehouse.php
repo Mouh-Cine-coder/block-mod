@@ -35,9 +35,13 @@ class Warehouse
     #[ORM\OneToMany(mappedBy: 'warehouse', targetEntity: Product::class)]
     private Collection $products;
 
+    #[ORM\OneToMany(mappedBy: 'warehouse', targetEntity: User::class)]
+    private Collection $worksIn;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->worksIn = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +133,36 @@ class Warehouse
             // set the owning side to null (unless already changed)
             if ($product->getWarehouse() === $this) {
                 $product->setWarehouse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getWorksIn(): Collection
+    {
+        return $this->worksIn;
+    }
+
+    public function addWorksIn(User $worksIn): self
+    {
+        if (!$this->worksIn->contains($worksIn)) {
+            $this->worksIn->add($worksIn);
+            $worksIn->setWarehouse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorksIn(User $worksIn): self
+    {
+        if ($this->worksIn->removeElement($worksIn)) {
+            // set the owning side to null (unless already changed)
+            if ($worksIn->getWarehouse() === $this) {
+                $worksIn->setWarehouse(null);
             }
         }
 
