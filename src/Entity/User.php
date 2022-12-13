@@ -41,7 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
-        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,24 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-        }
-
-        return $this;
-    }
-
+    
     public function getWarehouse(): ?Warehouse
     {
         return $this->warehouse;
