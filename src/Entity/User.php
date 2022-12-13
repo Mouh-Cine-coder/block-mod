@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
+use Attribute;
+use Doctrine\Common\Annotations\Annotation\Attributes;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource]
