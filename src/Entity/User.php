@@ -8,8 +8,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -32,9 +34,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: ApiToken::class, orphanRemoval: true)]
     private Collection $apiTokens;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Product::class)]
-    private Collection $products;
+    #[ORM\ManyToOne(inversedBy: 'worksIn')]
+    private ?Warehouse $warehouse = null;
 
+    
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
@@ -153,21 +156,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->setOwner($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function getWarehouse(): ?Warehouse
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getOwner() === $this) {
-                $product->setOwner(null);
-            }
-        }
+        return $this->warehouse;
+    }
+
+    public function setWarehouse(?Warehouse $warehouse): self
+    {
+        $this->warehouse = $warehouse;
 
         return $this;
     }
+
+    
 }

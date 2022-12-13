@@ -43,9 +43,6 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Warehouse $warehouse = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?User $owner = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -147,15 +144,4 @@ class Product
         return $this;
     }
 
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
 }
